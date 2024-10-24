@@ -1,0 +1,359 @@
+---
+title: 'Inverts'
+author: "Tom Carruthers (<tom@bluematterscience.com>)"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    number_sections: yes
+    toc: yes
+subtitle: Informing management of hand harvested invertebrate fisheries in B.C.
+vignette: >
+  %\VignetteIndexEntry{Inverts}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<style type="text/css">
+
+body{ /* Normal  */
+   font-size: 12px;
+}
+td {  /* Table  */
+   font-size: 8px;
+}
+h1 { /* Header 1 */
+ font-size: 18px;
+ color: DarkBlue;
+}
+h2 { /* Header 2 */
+ font-size: 15px;
+ color: DarkBlue;
+}
+h3 { /* Header 3 */
+ font-size: 14px;
+ color: DarkBlue;
+}
+code.r{ /* Code block */
+  font-size: 10px;
+}
+pre { /* Code block */
+  font-size: 10px
+}
+</style>
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+knitr::opts_chunk$set(dpi=85, fig.width=7.5, fig.height = 5)
+```
+<br>
+
+# Foreword
+
+The
+
+<br>
+
+# Objective of this document
+
+This document is intended to guide a prospective users through various MSE analyses providing examples on how to:
+
+* specify and condition operating models
+* modify operating models
+* define and calculate management performance metrics
+* design and test management procedures 
+* produce their own plots and diagnostics
+
+<br>
+
+# Version Notes 
+
+The package is subject to ongoing testing and development. If you find a bug or a problem please send a report to <tom@bluematterscience.com> so that it can be fixed!  
+
+<br>
+
+## Future additions 
+
+MSE diagnostics
+
+* Convergence plots
+* Value of information
+
+Visualization
+
+* Pencil plots (likelihood of obtaining biomass reference levels)
+
+
+<br>
+
+
+# Introduction
+
+## Hand Harvested Invertebrates
+
+The 
+
+MSE 
+
+## Background information
+
+## The operating model 
+
+A 
+
+The current operating model assumes ....
+
+```{r loadsecret,echo=F,warning=F,error=F,message=F}
+library(Inverts)
+library(Inverts.GD)
+```
+
+
+
+## MSE design
+
+
+
+
+## Data 
+
+<br>
+
+# Installation
+
+1. Install [R for Windows](https://cran.r-project.org/bin/windows/)
+
+2. Install [RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+3. Install openMSE and devtools packages
+
+Open RStudio and enter the following commands into the console:
+
+```{r install_openMSE_devtools,eval=F}
+install.packages('openMSE')
+install.packages('devtools')
+```
+
+4. Install github packages including the Inverts and RPC R packages by opening RStudio and entering the following commands at the R console :
+
+```{r install_github_packages,eval=F}
+devtools::install_github("blue-matter/RPC") 
+devtools::install_github("blue-matter/Inverts") 
+```
+
+5. Install any species specific packages
+
+```{r install_species_packages,eval=F}
+devtools::install_github("blue-matter/Inverts.GD") # Geoduck
+devtools::install_github("blue-matter/Inverts.MC") # Manilla clam
+```
+
+6. Check that the installation is successful by finding this help file (the Inverts vignette):
+```{r load_library, eval=F}
+library(Inverts)
+vignette('Inverts')
+```
+
+If you have any difficulties please send an inquiry including some reproducible code to: tom@bluematterscience.com
+
+<br>
+
+# Quick start: run an MSE with pre-specified objects
+
+## Loading the library
+```{r loadlibrary}
+library(Inverts)
+```
+
+## Calculate reference points
+
+
+## Project current management
+
+
+## Plot performance outcomes
+
+
+
+# The Inverts packages
+
+Objects and code are organized into a generic package 'Inverts' and a series of species-specific packages (e.g., Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.SC for geoduck, manila clam, green sea urchin and sea cucumber, respectively).
+
+Organizing the packages this way means that unnecessary objects are not needed to be loaded when working on a particular species. Additionally the framework can be scaled to multiple species and allows for individual improvements to particular species without impacting the other packages. 
+
+# Specifying Operating Models
+
+## Objects and data
+
+The Inverts package includes all of the generic functions for searching for objects, interrogating operating models,  running MSEs and plotting results. 
+
+The package comes with reference operating models (class OM) already conditioned for each species (e.g. OM_GD_7 is the operating model for Geoduck in management area 7).
+
+You can search the loaded Inverts packages for any object of a given class using the objs() function:
+
+
+```{r objs}
+library(Inverts)
+objs('OM')  # lists all objects of class 'OM' in the loaded Inverts packages
+```
+
+When you load a species-specific library, you get bespoke input files (class 'In') and functions specific to that species:
+
+```{r objs_species_specific}
+library(Inverts.GD)   # load the geoduck library
+objs('In')  # lists all objects of class 'In' in the loaded Inverts packages
+```
+
+Input object are specific to a particular region. You can plot the areas and some details of the operating models using the about() function:
+
+```{r about_1, out.width="50%", out.height="50%"}
+about(In.GD.7)  # Plot some information about the input object
+```
+
+
+This also works for operating model objects which may have more information if they have been conditioned on data (such as unfished recruitment R0 (millons) and stock depletion (recent SSB relative to unfished):
+
+```{r about_2, out.width="50%", out.height="50%"}
+about(OM.GD.7)  # Plot some information about an operating model 
+```
+
+If you don't want the figure and just want the data you can alter some arguments of the about function
+
+```{r about_3, out.width="50%", out.height="50%"}
+about(OM.GD.7, plot.fig = F, ret.dat = T)  # Extract only the data
+```
+
+Remember all of the functions are documented and can be accessed with the  ? operator:
+
+
+```{r about_4, eval=F}
+?about
+```
+
+The input objects are the smallest and most concise basis for creating operating models and MSE analyses in a reproducible way. These objects contain the parameters and data required to condition operating models using the Rapid Conditioning Model (RCM) of OpenMSE. 
+
+
+```{r In_objs,eval=F}
+names(In.GD.7)             # slot 1 is the name, slot 2 is the OM parameters, slot 3 contains the data
+class(In.GD.7$OM)          # this object is of class 'OM' for operating model, an OpenMSE object containing all parameters for the OM
+class?OM                   # find out more about this class
+
+class(In.GD.7$RCMdata)     # this object is of class 'RCMdata', an OpenMSE object containing all fishery data used for conditioning the OM
+class?RCMdata              # find out more about this class
+
+slotNames(In.GD.7$RCMdata) # list all the data types included in the object
+In.GD.7$RCMdata@Chist      # the historical catches
+```
+
+## Conditioning operating models
+
+Using these input objects you can condition an operating model for this stock unit. The reason this is done at this level (we don't provide pre-fitted OMs, other than the demonstration reference operating models in the Inverts package) is because you require control over the number of simulations to run. For example, in this script or a workshop we might wish to demonstrate functionality quickly using only a few simulations. In a setting where management advice is to be followed you might want 200+ simulations. 
+
+Each input object has up to 500 simulations already specified. 
+
+You can select a number of simulations and then condition an operating model. In this case we are using a function from the Geoduck package 'Inverts.GD'. This conditioning function is bespoke and include features for model specification, fitting and acceptance/rejection that are specific to Geoduck. Other species have similar functions (e.g. cond.MC() for manila clam). 
+
+This code might take a few minutes to run. To speed up this calculation and all of the other parts of this tutorial we are going to specify only 24 simulations:
+
+```{r Condition_1, eval=F}
+?cond.GD()
+myfit = cond.GD(In.GD.7, sims=24)
+```
+
+Once you have a fitted operating model the first thing you might wish to do is visualize the data, fit to data and model estimates:
+
+```{r plot_RCMfit, eval=F}
+plot(myfit)
+```
+
+Alternatively, you could focus on the operating model characteristics including those parts of the operating model that simulate data and implement advice:
+
+```{r plot_RCMfit-OM, eval=F}
+plot(myfit@OM)
+```
+
+
+## Calculating reference points
+
+You can reconstruct the historical period of an operating model and calculate a wide range of reference points using the runMSE() function and by specifying the Hist argument (this may take a minute or so):
+
+```{r do_Hist, eval=F}
+Hist = runMSE(myfit@OM, Hist=T)
+```
+
+Visualize reference points using the the RPC library
+
+```{r RPC_library, eval=T,out.width="50%", out.height="50%"}
+library(RPC)
+LRP_SSBMSY(Hist)
+```
+
+
+
+
+
+The operating model is fully compatible with the shiny app [Reference Point Calculator](https://shiny.bluematterscience.com/app/rpc) to provide a very comprehensive report on ALL fishery reference points ever described and also allows for the testing of management procedures. 
+
+To use the app you should save the operating model object to your computer, open the app link above and then upload your saved operating model object:
+
+```{r RPC-export, eval=F}
+saveRDS(myfit@OM, file="C:/temp/my_fitted_OM.rds") # this is the file you upload to the RPC app
+```
+
+<img src="img/RPC.png" width="400">
+
+
+
+
+
+## A guide to the MSE design
+
+### Reference Trials
+
+
+
+### Robustness Trials
+
+Here is a figure showing the configuration of the various robustness OMs:
+
+
+## Running an MSE using pre-specified objects
+
+### Observation models
+
+### Implementation Error models
+
+underages and maximum harvest rates (ie a TAC can be taken up to a maximum harvest rate of 90 per cent).
+
+### Management procedures
+
+
+### Running a preliminary MSE
+
+Management strategy evaluation is computationally intensive and typically requires the recursive application of 
+
+### MSE outputs
+
+
+
+<br>
+
+# Limitations
+
+## Idealised observation models for catch composition data
+Currently, catch-composition data  are simulated from the true simulated catch composition data via a multinomial distribution and some effective sample size. This observation model may be unrealistically well-behaved and favour those approaches that use these data.
+
+
+<br>
+
+#References
+
+
+```{r, echo=FALSE, eval=FALSE}
+sfStop()                            
+```
+
+<br>

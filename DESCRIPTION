@@ -1,0 +1,23 @@
+Package: Inverts
+Type: Package
+Title: MSE for B.C. Invertebrate Species
+Version: 0.2.0
+Author: person("Tom", "Carruthers", email = "tom@bluematterscience.com", role = c("aut"))
+Maintainer: Tom Carruthers <tom@bluematterscience.com>
+Description: Tools for informing management of B.C. Invertebrate Species. 
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: 
+  R (>= 3.5.0),
+  openMSE,
+  maps,
+  sf
+Imports:
+    maps
+Suggests: 
+    knitr,
+    rmarkdown
+URL: https://msetool.openmse.com/
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
