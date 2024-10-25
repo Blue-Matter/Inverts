@@ -12,7 +12,8 @@ about(
   col = "red",
   plot.fig = T,
   ret.dat = F,
-  p = c(0.05, 0.95)
+  p = c(0.05, 0.95),
+  plot.MAs = T
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ about(
 \item{ret.dat}{Logical Should the summary data be returned?}
 
 \item{p}{The quantiles to be calculated e.g. p=c(0.005, 0.995) is the 99 percent interval}
+
+\item{plot.MAs}{Logical, should the management areas (statistical areas) be plotted (slower)?}
 }
 \description{
 A plot and optional list of properties
