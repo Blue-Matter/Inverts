@@ -3,9 +3,10 @@ title: 'Inverts'
 author: "Tom Carruthers (<tom@bluematterscience.com>)"
 date: "`r Sys.Date()`"
 output:
-  rmarkdown::html_vignette:
+  rmarkdown::html_document:
     number_sections: yes
-    toc: yes
+    toc: true
+    toc_float: true
 subtitle: Informing management of hand harvested invertebrate fisheries in B.C.
 vignette: >
   %\VignetteIndexEntry{Inverts}
@@ -19,7 +20,7 @@ body{ /* Normal  */
    font-size: 12px;
 }
 td {  /* Table  */
-   font-size: 8px;
+   font-size: 9px;
 }
 h1 { /* Header 1 */
  font-size: 18px;
@@ -42,26 +43,44 @@ pre { /* Code block */
 </style>
 
 
+
+<img src="img/Front Page.jpg" width = 910>
+
+
+
+&nbsp;
+
+<img src="img/BM.jpg" width="140">
+<img src="img/openMSE.jpg" width="150">
+<img src="img/DFO.png" width="140">
+
+
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 knitr::opts_chunk$set(dpi=85, fig.width=7.5, fig.height = 5)
+library(RPC)
+library(openMSE)
+library(Inverts)
+library(Inverts.GD)
+library(Inverts.MC)
 ```
 <br>
 
 # Foreword
 
-The
+Fisheries for hand-harvested invertebrates (HHI) present opportunities and challenges for science and management that are unlike fisheries for pelagic finfish. Populations at the scale of the B.C. coastline are likely to have regional sub-population dynamics at varying spatial scales with uncertain larval dispersal and exchange of biomass. Data on HHI may come from a mix of commerical, recreational and organized scientific surveys that are often not available for earlier time periods of substantial exploitation. While aspects of population dynamics and structure may be highly uncertain, the prescriptive nature of management measures (e.g. minimum size limits, rotational spatial closures, gear restrictions) for HHI could be highly robust and support the sustainable exploitation of productive stocks. This research and decision support tools use operating models and MSE (Management Strategy Evaluation) simulation testing to characterize scientific uncertainty to inform robust management decision making. 
 
 <br>
 
 # Objective of this document
 
-This document is intended to guide a prospective users through various MSE analyses providing examples on how to:
+This document is intended to describe the decision support tools and guide prospective users through various aspects of MSE analyses providing examples on how to:
 
 * specify and condition operating models
+* calculate reference points
 * modify operating models
 * define and calculate management performance metrics
 * design and test management procedures 
@@ -75,50 +94,69 @@ The package is subject to ongoing testing and development. If you find a bug or 
 
 <br>
 
-## Future additions 
-
-MSE diagnostics
-
-* Convergence plots
-* Value of information
-
-Visualization
-
-* Pencil plots (likelihood of obtaining biomass reference levels)
-
-
-<br>
-
 
 # Introduction
 
 ## Hand Harvested Invertebrates
 
-The 
+As part of the approach to meeting the Fish Stocks provisions (FSP) in the revised Fisheries Act, DFO’s Marine Invertebrate Section (MIS) has been adapting the Management Procedure (MP) Framework (Anderson et al. 2021), a decision support tool, to support investigation of management decisions related to conservation objectives for Pacific marine invertebrates. This project will result in a decision support tool  for exploring impacts of spatial closures (Marine Spatial Planning) and other management actions, in order to better understand trade-offs for decision makers under future marine ecosystem and human use (primarily fishing) scenarios.  
 
-MSE 
+These libraries adapt existing tools of the MP Framework to: define reference case and robustness operating models (OMs); define quantitative performance metrics; test alternative management procedures, calculate appropriate reference points, with management options relevant for marine invertebrates; and determining additional management objectives beyond the FSP for the four case studies (Geoduck, intertidal clams, Green Sea Urchin, and Giant Red Sea Cucumber).
+
 
 ## Background information
 
-## The operating model 
+Project information, links and results are available from a [project webpage](https://mis-assess.github.io/csrf_hh_io/3369975a9851e6fd41a0ae6865456662040af596/index.html)
 
-A 
 
-The current operating model assumes ....
+## Software
 
-```{r loadsecret,echo=F,warning=F,error=F,message=F}
-library(Inverts)
-library(Inverts.GD)
+The [openMSE R package](https://openmse.com) was used to organize fishery data, define operating models, condition operating models to data, calculate reference points and specify and test existing and alternative management options. 
+
+The [Rapid Conditioning Model](https://openmse.com/tutorial-rcm/) was used to fit operating models to observed data. 
+
+[Reference Point Calculator (Huynh et al. )](https://shiny.bluematterscience.com/app/rpc) was used to explore fishery reference points
+
+<br>
+
+
+Objects and code are organized into a generic package 'Inverts' and a series of species-specific packages (e.g., Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.SC for geoduck, manila clam, green sea urchin and sea cucumber, respectively).
+
+Organizing the packages this way means that unnecessary objects do not need to be loaded when working on a particular species. Additionally the framework can be scaled to new species and allows for individual improvements to particular species without impacting the other packages. 
+
+```{r Rpackages, eval=T,echo = FALSE}
+dat<-data.frame(c("Inverts","Inverts.GD", "Inverts.MC", "Inverts.GSU", "Inverts.SC"),
+                
+                 c("The umbrella R package containing generic code and example objects for each case study stock",
+                   "Data, operating models and tools specific to Geoduck",
+                   "Data, operating models and tools specific to Manila Clam",
+                   "Data, operating models and tools specific to Green Sea Urchin",
+                   "Data, operating models and tools specific to Giant Red Sea Cucumber"))
+
+kableExtra::kable(dat,"simple",col.names=rep("",2)) 
+ 
+
 ```
 
+<br>
 
+Data, operating models, analyses and R packages are stored on the following GitHub repositories
 
-## MSE design
+```{r GitHub, eval=T,echo = FALSE}
 
+dat<-data.frame(c("mis-assess/csrf_hh_data","mis-assess/csrf_hh_io","blue-matter/Inverts","blue-matter/Inverts.GD", "blue-matter/Inverts.MC", "blue-matter/Inverts.GSU", "blue-matter/Inverts.SC"),
+                   c("Raw data, background analyses, supporting documentation for project",
+                   "Project splash page",
+                   "Inverts R package",
+                   "Inverts.GD R package",
+                   "Inverts.MC R package",
+                   "Inverts.GSU R package",
+                   "Inverts.SC R package"), 
+                   c("Private",rep("Public",6)))
 
+kableExtra::kable(dat,"simple",col.names=rep("",3))
 
-
-## Data 
+```
 
 <br>
 
@@ -148,7 +186,7 @@ devtools::install_github("blue-matter/Inverts")
 
 ```{r install_species_packages,eval=F}
 devtools::install_github("blue-matter/Inverts.GD") # Geoduck
-devtools::install_github("blue-matter/Inverts.MC") # Manilla clam
+devtools::install_github("blue-matter/Inverts.MC") # Manila clam
 ```
 
 6. Check that the installation is successful by finding this help file (the Inverts vignette):
@@ -163,26 +201,10 @@ If you have any difficulties please send an inquiry including some reproducible 
 
 # Quick start: run an MSE with pre-specified objects
 
-## Loading the library
-```{r loadlibrary}
-library(Inverts)
-```
-
-## Calculate reference points
-
-
-## Project current management
-
-
-## Plot performance outcomes
 
 
 
-# The Inverts packages
-
-Objects and code are organized into a generic package 'Inverts' and a series of species-specific packages (e.g., Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.SC for geoduck, manila clam, green sea urchin and sea cucumber, respectively).
-
-Organizing the packages this way means that unnecessary objects are not needed to be loaded when working on a particular species. Additionally the framework can be scaled to multiple species and allows for individual improvements to particular species without impacting the other packages. 
+<br>
 
 # Specifying Operating Models
 
@@ -214,10 +236,10 @@ about(In.GD.7)  # Plot some information about the input object
 ```
 
 
-This also works for operating model objects which may have more information if they have been conditioned on data (such as unfished recruitment R0 (millons) and stock depletion (recent SSB relative to unfished):
+This also works for operating model objects which may have more information if they have been conditioned on data (such as unfished recruitment R0 (millions) and stock depletion (recent SSB relative to unfished):
 
 ```{r about_2, out.width="50%", out.height="50%"}
-about(OM.GD.7)  # Plot some information about an operating model 
+about(OM.MC.E)  # Plot some information about an operating model 
 ```
 
 If you don't want the figure and just want the data you can alter some arguments of the about function
@@ -258,9 +280,9 @@ You can select a number of simulations and then condition an operating model. In
 
 This code might take a few minutes to run. To speed up this calculation and all of the other parts of this tutorial we are going to specify only 24 simulations:
 
-```{r Condition_1, eval=F}
-?cond.GD()
-myfit = cond.GD(In.GD.7, sims=24)
+```{r Condition_MC, eval=F}
+?cond.MC()
+myfit = cond.MC(In.MC.E, sims=24)
 ```
 
 Once you have a fitted operating model the first thing you might wish to do is visualize the data, fit to data and model estimates:
@@ -278,24 +300,125 @@ plot(myfit@OM)
 
 ## Calculating reference points
 
-You can reconstruct the historical period of an operating model and calculate a wide range of reference points using the runMSE() function and by specifying the Hist argument (this may take a minute or so):
+### The Inverts Package
+
+The Inverts package contains functions for the extraction and plotting of management reference points. 
+
+Firstly, you need to reconstruct the historical fishery in your R session using the runMSE() function with argument Hist=T. This means that the historical spool-up period of the operating model (before you were do to management projections) is calculated including a very wide range of reference points and quantities relating to reference points.
+
+In later steps, projections will be undertaken to test management options (data quality, management procedures etc). By pre-calculating the historical stock and reference points, you don't have to do this every time you do a projection (historical dynamics are fixed for each operating model) which makes simulation testing faster. 
 
 ```{r do_Hist, eval=F}
 Hist = runMSE(myfit@OM, Hist=T)
 ```
 
-Visualize reference points using the the RPC library
+You can obtain a tabulated summary of reference points for a Hist object using the Ref.Points function:
 
-```{r RPC_library, eval=T,out.width="50%", out.height="50%"}
-library(RPC)
-LRP_SSBMSY(Hist)
+```{r RefPts1, eval=T, out.width="50%", out.height="50%", fig.height = 7}
+RPs = Ref.Points(Hist) 
+names(RPs)                 # names of listed reference points
+head(RPs$SSB_SSB0)         # start of the biomass relative to unfished entry
+```
+
+You can also use the internal plotting function on any of these tables if you want a single plot:
+
+```{r RefPts2, eval=T, out.width="50%", out.height="50%", fig.height = 3}
+RefPlot(RPs[[3]],names(RPs)[3])
+
+```
+
+For a summary of stock status in the most recent historical year two functions are provided:
+
+```{r RefPts3, eval=T, out.width="50%", out.height="50%", fig.height = 4}
+Status(Hist) # provides all the estimated values of SSB and F relative to reference points 
+
+```
+
+```{r RefPts4, eval=T, out.width="50%", out.height="50%", fig.height = 5}
+DFO_status(Hist) # plot estimated values of SSB and F relative to reference points on standard DFO regions 
+
+```
+
+If you would rather access all the raw data yourself, these are available in the Hist object in the following slots:
+
+```{r RefPts_custom, eval=T}
+names(Hist@TSdata)                  # Time series data like F (Find) and spawning biomass (SSB)
+names(Hist@Ref$ReferencePoints)     # Equilibrium reference points (parameters for most recent historical year)
+names(Hist@Ref$ByYear)              # Equilibrium reference points calculated from parameters in each historical year
+names(Hist@Ref$Dynamic_Unfished)    # Dynamic reference points (assuming no fishing for all years) 
+
+```
+
+It is possible to compare biological status across various operating models:
+
+```{r RefPts_across_OMs, eval=T}
+myfit2 = cond.MC(In.MC.C)
+Hist2 = runMSE(myfit2@OM)
+DFO_status_comp(list(Hist1,Hist2))
+
 ```
 
 
 
+### The Reference Point Calculator (RPC) Package
+
+Reference Point Calculator (Huynh et al. 2022) is a R package and App designed for the exploration of reference points and the testing of management procedures / Harvest Control Rules (HCRs). The package was developed as part of a DFO grant and allows for the calculation of a very wide range of reference points. 
+
+Many of the RPC plotting functions use objects of class 'Hist' that are historical reconstructions of the type calculated above (using runMSE(OM, Hist=T)). 
 
 
-The operating model is fully compatible with the shiny app [Reference Point Calculator](https://shiny.bluematterscience.com/app/rpc) to provide a very comprehensive report on ALL fishery reference points ever described and also allows for the testing of management procedures. 
+If you want a summary of the historical stock dynamics:
+
+```{r RPC_hist, eval=T,out.width="50%", out.height="50%"}
+hist_bio(Hist)
+```
+
+Also available are the yield curves (equilibrium catches at various population / exploitation levels)"
+
+```{r RPC_yieldcurves, eval=T,out.width="50%", out.height="50%"}
+hist_YieldCurve(Hist)
+```
+
+Here we plot the SSB history relative to MSY:
+
+```{r RPC_SSB, eval=T,out.width="50%", out.height="50%"}
+LRP_SSBMSY(Hist)
+```
+
+Exploitation rate relative to FMSY:
+
+```{r RPC_F, eval=T,out.width="50%", out.height="50%"}
+LRP_FMSY(Hist)
+```
+
+Spawning Potential Ratio:
+
+```{r RPC_SPR, eval=T,out.width="50%", out.height="50%"}
+LRP_SPR(Hist)
+```
+
+The historical recruitment:
+
+```{r RPC_Rec, eval=T,out.width="50%", out.height="50%"}
+LRP_R(Hist)
+```
+
+Spawning stock biomass (SSB) relative to the (mean) SSB corresponding to 50% max recruitment: 
+
+```{r RPC_50Rmax, eval=T,out.width="50%", out.height="50%",fig.height=3}
+LRP_50Rmax(Hist)
+```
+
+Historical surplus production: 
+
+```{r RPC_SP, eval=T,out.width="50%", out.height="50%", fig.height=3}
+LRP_SP(Hist)
+```
+
+
+### The Reference Point Calculator online App
+
+The operating model is fully compatible with the shiny app [Reference Point Calculator](https://shiny.bluematterscience.com/app/rpc) to provide a very comprehensive report on ALL fishery reference points ever described (including the various plots above) and also allows for the testing of management procedures. 
 
 To use the app you should save the operating model object to your computer, open the app link above and then upload your saved operating model object:
 
@@ -304,8 +427,6 @@ saveRDS(myfit@OM, file="C:/temp/my_fitted_OM.rds") # this is the file you upload
 ```
 
 <img src="img/RPC.png" width="400">
-
-
 
 
 

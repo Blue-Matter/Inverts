@@ -6,7 +6,7 @@
 \usage{
 about(
   obj,
-  xlim = c(-134.5, -125),
+  xlim = c(-135, -125.5),
   ylim = c(48, 55.5),
   xfac = 1.7,
   col = "red",
