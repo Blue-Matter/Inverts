@@ -4,7 +4,7 @@
 \alias{Status}
 \title{Summarize current stock status}
 \usage{
-Status(Hist, plot = T, col = "cadetblue")
+Status(Hist, plot = T, col = "cadetblue", digits = 4)
 }
 \arguments{
 \item{Hist}{An object of class Hist created by runMSE(OM, Hist=T)}

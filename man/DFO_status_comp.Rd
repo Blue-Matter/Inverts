@@ -4,7 +4,14 @@
 \alias{DFO_status_comp}
 \title{Compare stock status among operating models relative to standard DFO reference regions}
 \usage{
-DFO_status_comp(Histlist, p = c(0.05, 0.25, 0.5, 0.75, 0.95), abbrev_no = 8)
+DFO_status_comp(
+  Histlist,
+  p = c(0.025, 0.05, 0.25, 0.5, 0.75, 0.95, 0.975),
+  abbrev_no = 8,
+  pad = 0.02,
+  legpad = 0.4,
+  boxwd = 0.08
+)
 }
 \arguments{
 \item{Histlist}{A a list of objects of class Hist created by runMSE(OM, Hist=T)}
@@ -12,6 +19,12 @@ DFO_status_comp(Histlist, p = c(0.05, 0.25, 0.5, 0.75, 0.95), abbrev_no = 8)
 \item{p}{Vector of fractions (percentiles) for plotting bars}
 
 \item{abbrev_no}{Positive integer controlling abbreviation (length) of y axis labels (OM names)}
+
+\item{pad}{numerical value of additional (absolute y scale) padding for % probabilies on plot}
+
+\item{legpad}{numerical value (y axis multiplier) of additional legend padding}
+
+\item{boxwd}{positive numerical value of width of boxes (absolute y scale)}
 }
 \description{
 Distribution of estimated spawning biomass and fishing mortality rate relative to reference levels
