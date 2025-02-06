@@ -950,13 +950,36 @@ class(new_gear_MP) = "MP"
 ```
 
 
+# Species-specific considerations
+
+Some species are managed in a unique way that requires some specification of operating model and management procedure features. Those are described here.
+
+## Geoduck
+
+Geoduck are managed using rotational closures. This means that management procedures for Geoduck are set up to try and identify the recent cycle of closures and maintain this in future years. The geoduck MP can also be specified with a user defined pattern of closures using the 'rotation' argument:
+
+```{r SpecSpec_geoduck, eval=F}
+?MP.GD
+myGD = MP.GD
+formals(myGD)$rotation = rep(c(1,1,0),100)[1:OM.GD.7@proyears] # twice open for every year closed for the projected years (starting, open, open, closed)
+```
+
+A subtlety of geoduck is that the observation error model is disrupted by the on/off nature of historical catch observations. You need to specify these on the Hist object before you do projections:
+
+```{r SpecSpec_geoduck_obs, eval=F}
+Hist = runMSE(OM.GD.7,Hist=T)
+newHist = Obs.GD(Hist, Catch_CV = 0.02, Catch_bias = 1) # catch observations are unbiased with a 2% CV
+testy = Project(newHist,"MP.GD")
+```
+
+
 # Modifying and reconditioning operating models
 
 ## Input object configuration
 
 Input objects contain all of the parameters and data required to condition an operating model using the species-specific conditioning function (e.g., cond.MC, cond.GD, cond.GSU, cond.RSC). 
 
-You can list the available input objects using the avail function:
+You can list the available input objects using the objs() function:
 
 ```{r Input_objects, eval=T,echo=T, out.width="50%", out.height="50%",fig.height=3.5, fig.width=7.5}
 objs('In')     # all the invertebrate input objects available in this session 
