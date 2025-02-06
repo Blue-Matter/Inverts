@@ -10,7 +10,7 @@ objs(classy, package = NULL, msg = TRUE)
 \item{classy}{A class of object (character string, e.g. 'In', 'OM', 'MSE', 'MP')}
 
 \item{package}{Optional. Names(s) of the package to search for object of class `classy`. String
-Default is all `Inverts` packages (Inverts, Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.SC). Always searches the global environment as well.}
+Default is all `Inverts` packages (Inverts, Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.RSC). Always searches the global environment as well.}
 
 \item{msg}{Print messages?}
 }

@@ -6,7 +6,7 @@
 #'
 #' @param classy A class of object (character string, e.g. 'In', 'OM', 'MSE', 'MP')
 #' @param package Optional. Names(s) of the package to search for object of class `classy`. String
-#' Default is all `Inverts` packages (Inverts, Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.SC). Always searches the global environment as well.
+#' Default is all `Inverts` packages (Inverts, Inverts.GD, Inverts.MC, Inverts.GSU, Inverts.RSC). Always searches the global environment as well.
 #' @param msg Print messages?
 #' @examples
 #' objs("In", msg=FALSE)
@@ -23,7 +23,7 @@ objs = function (classy, package = NULL, msg = TRUE) {
   if (temp == "function")
     classy <- deparse(substitute(classy))
   else {
-    packages <- c("Inverts", "Inverts.GD", "Inverts.MC", "Inverts.GSU", "Inverts.SC")
+    packages <- c("Inverts", "Inverts.GD", "Inverts.MC", "Inverts.GSU", "Inverts.RSC")
     if (is.null(package)) {
       package <- packages
       pkgs <- search()
@@ -50,8 +50,8 @@ objs = function (classy, package = NULL, msg = TRUE) {
       MSEextra_funs <- getfuncs.inverts('Inverts.GSU', classy, msg)
       temp <- c(temp, MSEextra_funs)
     }
-    if ('Inverts.SC' %in% package) {
-      MSEextra_funs <- getfuncs.inverts('Inverts.SC', classy, msg)
+    if ('Inverts.RSC' %in% package) {
+      MSEextra_funs <- getfuncs.inverts('Inverts.RSC', classy, msg)
       temp <- c(temp, MSEextra_funs)
     }
 
