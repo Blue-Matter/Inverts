@@ -24,7 +24,7 @@ RefPlot = function(x, nam="", col="blue", refcols ="red"){
   medno = (nq+1)/2
   med = qs[,medno]
   qs = qs[,(1:nq)!=medno]
-  Ps = x[,grepl("P",colnames(x))]
+  Ps = x[,grepl("P",colnames(x)),drop=F]
   Pnams= names(Ps)
   Plevls = as.numeric(sapply(Pnams,function(x)strsplit(x,"P")[[1]][2]))/100
 
@@ -73,7 +73,7 @@ Ref.Points=function(Hist, plot = T, p = c(0.05,0.25,0.5,0.75,0.95),
 
   if(plot){
     par(mfrow=c(3,1),mai=c(0.3,0.6, 0.05, 0.3),omi=c(0.4,0.01,0.01,0.3))
-    for(i in 1:length(outlist))    RefPlot(outlist[[i]],names(outlist)[i])
+    for(i in 1:length(outlist))    RefPlot(x=outlist[[i]],nam=names(outlist)[i])
     mtext("P(X < level)",4,line=0.4,col="red",outer=T)
     mtext("Historical Year",1,line=0.5,outer=T)
 

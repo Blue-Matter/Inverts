@@ -134,7 +134,7 @@ DFO_stat_plot = function(Br, Fr, xlab = NA, ylab = NA,legpos = "left",legpos2 ="
 #' @examples
 #' DFO_status_comp(list(Hist,Hist2))
 #' @export
-DFO_status_comp=function(Histlist,p=c(0.025,0.05,0.25,0.5,0.75,0.95,0.975),abbrev_no=8,pad=0.02,legpad=0.4, boxwd=0.08){
+DFO_status_comp=function(Histlist,p=c(0.025,0.05,0.25,0.5,0.75,0.95,0.975),abbrev_no=6,pad=0.02,legpad=0.4, boxwd=0.08){
 
   Yr = Histlist[[1]]@OM@CurrentYr
   #Histlist = list(Hist, Hist2)
@@ -152,14 +152,15 @@ DFO_status_comp=function(Histlist,p=c(0.025,0.05,0.25,0.5,0.75,0.95,0.975),abbre
   textpos=max(locs)*(1+legpad*0.66)
   MSEtool:::add_zones(textpos);grid()
   nq = length(p)
+  ni = nrow(qs)
   lwds=c(3,6,10)
-  for(i in 1:2){
+  for(i in 1:ni){
     for(qq in 1:2)lines(c(qs[i,qq],qs[i,nq-qq+1]),rep(locs[i],2),lwd=lwds[qq])
     midp = ceiling(nq/2)
     lines(rep(qs[i,midp],2),locs[i]+c(-boxwd,boxwd),lwd=3,col='red')
     polygon(c(rep(qs[i,3],2),rep(qs[i,5],2)),locs[i]+c(-boxwd,boxwd,boxwd,-boxwd),lwd=2)
     lines(rep(mus[i],2),locs[i]+c(-boxwd,boxwd)*2.3,lwd=2,lty=3,col='red')
-    text(c(0.2,0.6,1.1),locs[i]+boxwd*2+pad,paste0(round(PH[i,]*100,2),"%"),cex=0.9,font=2,col=c("white","darkgrey","darkgrey"))
+    text(c(0.2,0.6,1.1),locs[i]+boxwd*2+pad,paste0(round(PH[i,]*100,2),"%"),cex=0.7,font=2,col=c("white","darkgrey","darkgrey"))
   }
   axis(1,c(-1E10,1E10),rep("",2)); axis(1)
   axis(2,c(-1E10,1E10),rep("",2)); axis(2,locs,nams,cex=0.7)
