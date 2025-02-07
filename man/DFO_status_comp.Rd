@@ -7,7 +7,7 @@
 DFO_status_comp(
   Histlist,
   p = c(0.025, 0.05, 0.25, 0.5, 0.75, 0.95, 0.975),
-  abbrev_no = 8,
+  abbrev_no = 6,
   pad = 0.02,
   legpad = 0.4,
   boxwd = 0.08
@@ -20,7 +20,7 @@ DFO_status_comp(
 
 \item{abbrev_no}{Positive integer controlling abbreviation (length) of y axis labels (OM names)}
 
-\item{pad}{numerical value of additional (absolute y scale) padding for % probabilies on plot}
+\item{pad}{numerical value of additional (absolute y scale) padding for percentage probabilies on plot}
 
 \item{legpad}{numerical value (y axis multiplier) of additional legend padding}
 

@@ -17,7 +17,7 @@ Ref.Points(
 
 \item{plot}{Logical, should the results be plotted?}
 
-\item{p}{Vector of quantiles to plot (Default is 90%, 50% intervals plus median)}
+\item{p}{Vector of quantiles to plot (Default is 90 percent, 50 percent intervals plus median)}
 
 \item{B0ref}{The SSB0 (unfished spawning biomass) reference levels (defaults to 0.2 and 0.4)}
 

@@ -127,7 +127,7 @@ DFO_stat_plot = function(Br, Fr, xlab = NA, ylab = NA,legpos = "left",legpos2 ="
 #' @param Histlist A a list of objects of class Hist created by runMSE(OM, Hist=T)
 #' @param p Vector of fractions (percentiles) for plotting bars
 #' @param abbrev_no Positive integer controlling abbreviation (length) of y axis labels (OM names)
-#' @param pad numerical value of additional (absolute y scale) padding for % probabilies on plot
+#' @param pad numerical value of additional (absolute y scale) padding for percentage probabilies on plot
 #' @param legpad numerical value (y axis multiplier) of additional legend padding
 #' @param boxwd positive numerical value of width of boxes (absolute y scale)
 #' @author T. Carruthers
