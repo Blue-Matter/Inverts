@@ -548,7 +548,7 @@ Most of these are reference MPs (e.g., curE - fishing at current effort levels, 
 
 The invertebrate-specific MPs (e.g. MP.MC) are designed to closely follow existing management measures but have sufficient flexibility to accommodate a wide range of modifications so that management alternatives can be investigated (more on that below in the 'Specifying management options' section)
 
-Running MSE projections is simple and uses the Project() function, where the historical simulation object (we made Hist earlier) is projected for at least one management scenario. Note that each simulation of this projection is identical in terms of recruitment deviation and observation error - the only difference is the MP, so simulation 1 for the first MP tested can be compared directly with simulation 1 for the other MPs. By sharing the same projected conditions, the relative differences among MPs are revealed more efficiently. 
+Running MSE projections uses the Project() function, where the historical simulation object (we made Hist earlier) is projected for at least one management scenario. Note that each simulation of this projection is identical in terms of recruitment deviation and observation error - the only difference is the MP, so simulation 1 for the first MP tested can be compared directly with simulation 1 for the other MPs. By sharing the same projected conditions, the relative differences among MPs are revealed more efficiently. 
 
 Here we do a projection of our status quo management MP for manila clam and and reference MP that fishes at half of perfectly know FMSY levels: 
 
@@ -574,7 +574,7 @@ DFO_tab(myMSE)[1:3,]
 ?DFO_tab  # to find out more
 ```
 
-Other simple outputs include NOAA_plot that shows the probability of not overfishing, probability of being above 50% BMSY (P50), long term yield and the probability catch changes are less than 15% among management updates:
+Other outputs include NOAA_plot that shows the probability of not overfishing, probability of being above 50% BMSY (P50), long term yield and the probability catch changes are less than 15% among management updates:
 
 
 ```{r tab_MSE_MC_2, eval=T, out.width="50%", out.height="50%",fig.height=6, fig.width=9}
@@ -829,7 +829,7 @@ These constant exploitation rate policies are worth investigating particularly f
 
 An alternative to empirical rules aiming for constant exploitation rate are MP that aim for a particular index level. These may be more appropriate in situations where there is variability in the sustainable rate of exploitation (due to changes in, for example, somatic growth, natural mortality rate, fishery size or age selectivity). 
 
-The index target approaches make changes to the catch advice to reach the target index level. These simple rules only ask for a target index level 'I.targ':
+The index target approaches make changes to the catch advice to reach the target index level. These rules only ask for a target index level 'I.targ':
 
 
 ```{r args_MP_MC_target, eval=F}
@@ -954,9 +954,9 @@ class(new_gear_MP) = "MP"
 
 Some species are managed in a unique way that requires some specification of operating model and management procedure features. Those are described here.
 
-## Geoduck
+## Rotational closures
 
-Geoduck are managed using rotational closures. This means that management procedures for Geoduck are set up to try and identify the recent cycle of closures and maintain this in future years. The geoduck MP can also be specified with a user defined pattern of closures using the 'rotation' argument:
+In some areas, species such as Geoduck and Cucumber are managed using rotational closures. This means that management procedures for these species are set up to try and identify the recent cycle of closures and maintain this in future years. These MPs (MP.GD an MP.RSC) can also be specified with a user defined pattern of closures using the 'rotation' argument:
 
 ```{r SpecSpec_geoduck, eval=F}
 ?MP.GD
@@ -964,7 +964,7 @@ myGD = MP.GD
 formals(myGD)$rotation = rep(c(1,1,0),100)[1:OM.GD.7@proyears] # twice open for every year closed for the projected years (starting, open, open, closed)
 ```
 
-A subtlety of geoduck is that the observation error model is disrupted by the on/off nature of historical catch observations. You need to specify these on the Hist object before you do projections:
+A subtlety of geoduck and red sea cucumber operating models is that the observation error model is disrupted by the on/off nature of historical catch observations. You need to specify these on the Hist object before you do projections, for example:
 
 ```{r SpecSpec_geoduck_obs, eval=F}
 Hist = runMSE(OM.GD.7,Hist=T)
@@ -1001,11 +1001,11 @@ Operating models are built from the parameter ranges specified in the operating 
 
 ```{r Input_objects3, eval=T}
 myOM = In.MC.E$OM
-slotNames(myOM) # most of these are simple parameter ranges for uniform sampling of values
+slotNames(myOM) # most of these are parameter ranges for uniform sampling of values
 names(myOM@cpars) # these are higher level, per simulation samples specifed by the user
 ```
 
-Operating model building first looks for the bespoke inputs of the custom parameters before settling on the simple ranges. For example the operating models will use OM@cpars$M before they use OM@M:
+Operating model building first looks for the bespoke inputs of the custom parameters before settling on the parameter ranges. For example the operating models will use OM@cpars$M before they use OM@M:
 
 ```{r Input_objects4, eval=T}
 validcpars() # list all the custom parameter options
