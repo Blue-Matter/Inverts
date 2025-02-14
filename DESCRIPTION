@@ -1,7 +1,7 @@
 Package: Inverts
 Type: Package
 Title: MSE for B.C. Invertebrate Species
-Version: 0.6.0
+Version: 0.7.0
 Author: person("Tom", "Carruthers", email = "tom@bluematterscience.com", role = c("aut"))
 Maintainer: Tom Carruthers <tom@bluematterscience.com>
 Description: Tools for informing management of B.C. Invertebrate Species. 

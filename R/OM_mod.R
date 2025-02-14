@@ -1,5 +1,6 @@
 # OM_mod
 
+# OM = Simulate(OM.GSU.12)            # historical reconstruction
 
 
 #' Modify natural mortality rate and recruitment
@@ -102,6 +103,7 @@ OM_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
 
 
 
+
 #' Modify future natural mortality rate and recruitment in projection years
 #'
 #' A wrapper function that modifies the cpars slot of the OM object to control the value and trajectory of natural mortality rate and recruitment strength for projection years.
@@ -110,11 +112,15 @@ OM_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
 #' @param M_val A single value of M, an lower/upper range of M (uniformly sampled) or a per-simulation specification of M (vector nsim long)
 #' @param M_trend A single value that is the annual percentage change in M (a value of 1 is a 1 percent increase per year in projection years) or a custom pattern in M for each projection year that is a factor (1 is no change)
 #' @param R_trend A single value that is the annual percentage change in recruitment strength (a value of 1 is a 1 percent increase per year in projection years) or a custom pattern in M for each projection year that is a factor (1 is no change)
+#' @param C_bias A single value that is the mean bias of the catch observations (1 is unbiased, 0.7 is 30 percent under reporting)
+#' @param C_err Positive real number that is the observation error in catches expressed as a coefficient of variation.
+#' @param Imp_match Logical should implementation (overage/undreage) match the catch reporting bias? E.g., a 20 percent undereporting comes with a 1/0.8 overage in the TAC.
+#' @param K_trend A single value that is the annual percentage change in von Bert. growth parameter K (a value of 1 is a 1 percent increase per year in projection years) or a custom pattern in K for each projection year that is a factor (1 is no change)
 #' @author T. Carruthers
 #' @examples
 #' OM_proj_mod(OM.MC.E, M_val = c(0.2,0.3), M_trend = 1, Rtrend = -1)
 #' @export
-OM_proj_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
+OM_proj_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0, C_bias = 1, C_err = 0.025, Imp_match = T, K_trend = 0){
 
   nsim = OM@nsim
   py = OM@proyears
@@ -123,6 +129,7 @@ OM_proj_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
   na = OM@maxage
   Mdims = c(nsim ,na+1, ay)
   pind = ny+1:py
+  yind = 1:ny
 
   if(class(OM)!="OM")stop("The first argument must be an object of class OM")
 
@@ -170,7 +177,7 @@ OM_proj_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
 
   if(!(length(M_trend)%in%c(1,py))) stop("M_trend must either be a single value (% annual change in M) or must be a factor vector nprojection years long (length OM@proyears)")
 
-  if(length(M_trend)!=1 & M_trend[1]!=0){
+  if(length(M_trend)!=1 | M_trend[1]!=0){
     if(length(M_trend)==1){
       fac = (1+M_trend/100)^(1:py)
       OM@cpars$M_ageArray[,,pind] = OM@cpars$M_ageArray[,,pind] * array(rep(fac,each=nsim*(na+1)), c(nsim,na+1,py))
@@ -185,7 +192,7 @@ OM_proj_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
 
   if(!(length(R_trend)%in%c(1,py))) stop("R_trend must either be a single value (% annual change in M) or must be a factor vector nprojection years long (length OM@proyears)")
 
-  if(length(R_trend)!=1 & R_trend[1]!=0){
+  if(length(R_trend)!=1 | R_trend[1]!=0){
     rind = na+ny+1:py
     if(length(R_trend)==1){
       fac = (1+R_trend/100)^(1:py)
@@ -197,6 +204,70 @@ OM_proj_mod = function(OM, M_val=NaN, M_trend = 0, R_trend = 0){
     }
   }
 
-  OM
+  # C_obs_bias_error --------------------------
 
+  if(!(length(C_bias)%in%c(1,nsim, py))) stop("R_trend must either be a single value a single bias for all sims, or vector nsim long (OM@nsim), or nprojection years long (length OM@proyears)")
+
+  if(C_bias[1] !=1 | C_err != 0.025){ # only if specified
+
+    if(length(C_bias)==1 | length(C_bias)==nsim){
+      Cobs_y = array(C_bias,c(nsim,ay))
+    }else{                        # np long
+      biasvec = c(rep(1,ny),C_bias)
+      Cobs_y = array(rep(biasvec, each=nsim), c(nsim, ay))
+    }
+
+    Cobs_y[,pind] = Cobs_y[,pind] * trlnorm(nsim*py, 1, C_err)
+    OM@cpars$Cobs_y = Cobs_y
+
+    cat(paste0("Projected catch modified to have C_bias and C_err \n"))
+
+    if(Imp_match){
+      if(length(C_bias)==1 | length(C_bias)==nsim){
+        TAC_y = array(1/C_bias, c(nsim, py))
+      }else{
+        TAC_y = array(rep(1/C_bias, each=nsim), c(nsim, py))
+      }
+      cat(paste0("Projected catch overages match the specified C_bias \n"))
+      OM@cpars$TAC_y = TAC_y
+    }
+
+  }
+
+  # Ktrend ------------------------------------
+
+  if(!(length(K_trend)%in%c(1,py))) stop("K_trend must either be a single value (% annual change in K) or must be a factor vector nprojection years long (length OM@proyears)")
+
+  if(length(K_trend)!=1 | K_trend[1]!=0){
+
+    Ks = OM@cpars$K
+    Linfs = OM@cpars$Linf
+    t0s = OM@cpars$t0
+    lendim = c(nsim,na+1,py)
+
+    sa = array(1:nsim,lendim)
+    aa = array(rep(1:(na+1),each=nsim),lendim)
+    ya = array(rep(1:ay,each=nsim*(na+1)),lendim)
+    plenage = array(NA,lendim)
+
+
+    if(length(K_trend)==1){
+      fac = (1+K_trend/100)^(1:py)
+      cat(paste0("Growth rate modified to change by ",K_trend, " per cent per year in the projection \n"))
+    }else{
+      fac=K_trend
+      cat(paste0("Growth rate rate modified to change by a custom specified trend in the projection years \n"))
+    }
+
+    plenage[] = Linfs[sa]*(1-exp(-(Ks[sa]*fac[ya])*(aa-1)-t0s[sa]))
+    OM@cpars$Len_age[,,pind] = plenage
+    OM@cpars$Wt_age = OM@cpars$Wa[1:nsim] * OM@cpars$Len_age ^ OM@cpars$Wb[1:nsim]
+
+  }
+
+  # Condition factor
+
+  # Maturity
+
+  OM
 }

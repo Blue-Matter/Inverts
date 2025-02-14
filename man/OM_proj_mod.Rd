@@ -4,7 +4,16 @@
 \alias{OM_proj_mod}
 \title{Modify future natural mortality rate and recruitment in projection years}
 \usage{
-OM_proj_mod(OM, M_val = NaN, M_trend = 0, R_trend = 0)
+OM_proj_mod(
+  OM,
+  M_val = NaN,
+  M_trend = 0,
+  R_trend = 0,
+  C_bias = 1,
+  C_err = 0.025,
+  Imp_match = T,
+  K_trend = 0
+)
 }
 \arguments{
 \item{OM}{An object of class OM}
@@ -14,6 +23,14 @@ OM_proj_mod(OM, M_val = NaN, M_trend = 0, R_trend = 0)
 \item{M_trend}{A single value that is the annual percentage change in M (a value of 1 is a 1 percent increase per year in projection years) or a custom pattern in M for each projection year that is a factor (1 is no change)}
 
 \item{R_trend}{A single value that is the annual percentage change in recruitment strength (a value of 1 is a 1 percent increase per year in projection years) or a custom pattern in M for each projection year that is a factor (1 is no change)}
+
+\item{C_bias}{A single value that is the mean bias of the catch observations (1 is unbiased, 0.7 is 30 percent under reporting)}
+
+\item{C_err}{Positive real number that is the observation error in catches expressed as a coefficient of variation.}
+
+\item{Imp_match}{Logical should implementation (overage/undreage) match the catch reporting bias? E.g., a 20 percent undereporting comes with a 1/0.8 overage in the TAC.}
+
+\item{K_trend}{A single value that is the annual percentage change in von Bert. growth parameter K (a value of 1 is a 1 percent increase per year in projection years) or a custom pattern in K for each projection year that is a factor (1 is no change)}
 }
 \description{
 A wrapper function that modifies the cpars slot of the OM object to control the value and trajectory of natural mortality rate and recruitment strength for projection years.
