@@ -48,10 +48,7 @@ pre { /* Code block */
 </style>
 
 
-
 <img src="img/Front Page.jpg" width = 910>
-
-
 
 &nbsp;
 
