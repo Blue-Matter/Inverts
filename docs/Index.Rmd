@@ -1,5 +1,5 @@
 ---
-title: 'Inverts'
+title: 'Inverts User Manual'
 author: "Tom Carruthers (<tom@bluematterscience.com>)"
 date: "`r Sys.Date()`"
 output:
@@ -7,7 +7,7 @@ output:
     number_sections: yes
     toc: true
     toc_float: true
-subtitle: An R package for informing management of hand harvested invertebrate fisheries in B.C.
+subtitle: An R package for conditioning operating models and conducting MSE for informing management of hand harvested invertebrate fisheries in B.C.
 vignette: >
   %\VignetteIndexEntry{Inverts}
   %\VignetteEngine{knitr::rmarkdown}
